@@ -3,21 +3,19 @@ module Main where
 import           Lib
 import           System.IO
 
+parsePosition :: String -> Maybe Position
+parsePosition str = case reads str of
+  [(p, "")] -> Just p
+  _ -> Nothing
+
 play :: Board -> IO Outcome
 play b = do
   putStr "which position you want to go: "
   hFlush stdout
   c <- getLine
-  let nx = move b (case c of
-        "N" ->  N
-        "E" ->  E
-        "S" ->  S
-        "W" ->  W
-        "NE" -> NE
-        "NW" -> NW
-        "SE" ->  SE
-        "SW" -> SW
-        _ ->  C)
+  let nx = case parsePosition c of
+        Just p -> move b p
+        _ -> InvalidMove
   print nx
   return nx
 

@@ -53,7 +53,7 @@ instance Show Board where
 
 data Position =
   N | E | S | W | NE | NW | SE | SW | C
-  deriving (Enum, Bounded, Ord, Eq, Show)
+  deriving (Enum, Bounded, Ord, Eq, Show, Read)
 
 data FinishedBoard = FinishedBoard (Maybe Choice) Board deriving Eq
 
