@@ -100,7 +100,7 @@ wins = [ (NW, N, NE)
        , (SW, S, SE)
        , (NW, C, SE)
        , (SW, C, NE)
-       ]
+       , (SW, W, NW)]
 
 judge :: Board -> Outcome
 judge b@(Board _ [])  = Inplay b

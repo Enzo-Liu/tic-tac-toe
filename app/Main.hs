@@ -1,19 +1,12 @@
 module Main where
 
-import           Control.Monad.Loops
 import           Lib
-
-getPos :: String -> Maybe Position
-getPos = undefined
-
-initGame :: IO Outcome
-initGame = do
-  putStrLn "game starts, X move first"
-  play emptyBoard
+import           System.IO
 
 play :: Board -> IO Outcome
 play b = do
   putStr "which position you want to go: "
+  hFlush stdout
   c <- getLine
   let nx = move b (case c of
         "N" ->  N
@@ -28,15 +21,17 @@ play b = do
   print nx
   return nx
 
-runGame :: Outcome -> IO Outcome
-runGame (Inplay b) = play b
+runGame :: Board -> Outcome -> IO Outcome
+runGame _ (Inplay b) = runWithBoard b
+runGame b' InvalidMove = putStrLn "wrong move" >> runWithBoard b'
+runGame _ oc = return oc
 
-done :: Outcome -> Bool
-done (Done _) = True
-done _ = False
+runWithBoard :: Board -> IO Outcome
+runWithBoard b = play b >>= runGame b
 
 gameLoop :: IO Outcome
-gameLoop = initGame >>= iterateUntilM done runGame
+gameLoop = putStrLn "game starts, X move first" >> runWithBoard emptyBoard
 
 main :: IO ()
 main = gameLoop >>= \_-> pure ()
+-- main = putStrLn "Hello, what's your name?"   >> getLine >>= (\name -> putStrLn ("Hey " ++ name ++ ", you rock!"))
