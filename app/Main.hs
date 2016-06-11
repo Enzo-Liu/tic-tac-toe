@@ -5,8 +5,9 @@ import           System.IO
 
 parsePosition :: String -> Maybe Position
 parsePosition str = case reads str of
-  [(p, "")] -> Just p
+  [(p, rest)] | ok rest -> Just p
   _ -> Nothing
+  where ok = all (`elem` " \r\n")
 
 play :: Board -> IO Outcome
 play b = do
